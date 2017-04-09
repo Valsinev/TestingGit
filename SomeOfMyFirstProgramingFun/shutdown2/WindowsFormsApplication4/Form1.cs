@@ -72,6 +72,8 @@ namespace WindowsFormsApplication4
                     result = "shutdown /s /t " + convertToSec;
                 }
                 Cmd(result);
+
+                Application.Exit();
             }
             catch (ArgumentException)
             {
