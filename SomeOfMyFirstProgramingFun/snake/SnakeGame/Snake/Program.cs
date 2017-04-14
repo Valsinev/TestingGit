@@ -6,15 +6,18 @@ using System.Linq;
 
 namespace Snake
 {
-    class Program
+    public class Program
     {
         private static byte direction;
-        private static byte down = 0;
-        private static byte up = 1;
-        private static byte left = 2;
-        private static byte right = 3;
+        private static byte right = 0;
+        private static byte left = 1;
+        private static byte down = 2;
+        private static byte up = 3;
         private static int speedIncreaser = 4;
         private static int gameSpeed = 200;
+        private static char snakeBodyElement = '#';
+        private static char snakeFoodElement = 'Q';
+        private static long gameScore = 0;
 
         static void Main(string[] args)
         {
@@ -25,10 +28,10 @@ namespace Snake
 
             Position[] directions =
             {
-            new Position(0, 1),
-            new Position(0, -1),
-            new Position(-1, 0),
-            new Position(1, 0)
+            new Position(1, 0), // right
+            new Position(-1, 0), //left
+            new Position(0, 1), //down
+            new Position(0, -1), //up
             };
 
             for (int i = 0; i < 5; i++)
@@ -36,13 +39,10 @@ namespace Snake
                 snakeBody.Enqueue(new Position(i, 0));
             }
 
-            Position nextPosition;
-
             foreach (Position position in snakeBody)
             {
-                nextPosition = position;
-                Console.SetCursorPosition(nextPosition.Col, nextPosition.Row);
-                Console.Write("*");
+                Console.SetCursorPosition(position.Col, position.Row);
+                Console.Write(snakeBodyElement);
             }
 
             var randomNumberGenerator = new Random();
@@ -51,13 +51,12 @@ namespace Snake
                 randomNumberGenerator.Next(0, Console.WindowWidth),
                 randomNumberGenerator.Next(0, Console.WindowHeight));
             Console.SetCursorPosition(food.Col, food.Row);
-            Console.Write("Q");
+            Console.Write(snakeFoodElement);
 
             while (true)
             {
                 if (Console.KeyAvailable)
                 {
-                    //moving the snake
                     var input = Console.ReadKey().Key;
 
                     if (input == ConsoleKey.RightArrow)
@@ -82,10 +81,24 @@ namespace Snake
                 var newHead = new Position(
                     currentHead.Col + directions[direction].Col,
                     currentHead.Row + directions[direction].Row);
-                snakeBody.Enqueue(newHead);
 
+                //ending the gameafther collision
+                if (newHead.Col < 0 ||
+                    newHead.Col >= Console.WindowWidth ||
+                    newHead.Row < 0 ||
+                    newHead.Row >= Console.WindowHeight ||
+                    snakeBody.Contains(newHead))
+                {
+                    Console.SetCursorPosition(0, 0);
+                    Console.WriteLine("Game over!");
+                    Console.WriteLine("Your score is {0}", gameScore);
+                    Console.ReadLine();
+                    return;
+                }
+
+                snakeBody.Enqueue(newHead);
                 Console.SetCursorPosition(newHead.Col, newHead.Row);
-                Console.Write("#");
+                Console.Write(snakeBodyElement);
 
                 //eating the food
                 if (snakeBody.Contains(food))
@@ -95,7 +108,9 @@ namespace Snake
                         randomNumberGenerator.Next(0, Console.WindowHeight));
 
                     Console.SetCursorPosition(food.Col, food.Row);
-                    Console.Write("Q");
+                    Console.Write(snakeFoodElement);
+
+                    gameScore += 100;
 
                     if (gameSpeed - speedIncreaser < 0)
                     {
