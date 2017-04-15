@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
@@ -13,9 +12,9 @@ namespace Snake
         private static byte left = 1;
         private static byte down = 2;
         private static byte up = 3;
-        private static int speedIncreaser = 4;
+        private static int speedIncreaser = 1;
         private static int gameSpeed = 200;
-        private static char snakeBodyElement = '#';
+        private static char snakeBodyElement = '0';
         private static char snakeFoodElement = 'Q';
         private static long gameScore = 0;
 
@@ -82,12 +81,13 @@ namespace Snake
                     currentHead.Col + directions[direction].Col,
                     currentHead.Row + directions[direction].Row);
 
+                if (newHead.Col < 0) newHead.Col = Console.WindowWidth - 1;
+                if (newHead.Col >= Console.WindowWidth) newHead.Col = 0;
+                if (newHead.Row < 0) newHead.Row = Console.WindowHeight - 1;
+                if (newHead.Row >= Console.WindowHeight) newHead.Row = 0;
+
                 //ending the gameafther collision
-                if (newHead.Col < 0 ||
-                    newHead.Col >= Console.WindowWidth ||
-                    newHead.Row < 0 ||
-                    newHead.Row >= Console.WindowHeight ||
-                    snakeBody.Contains(newHead))
+                if (snakeBody.Contains(newHead))
                 {
                     Console.SetCursorPosition(0, 0);
                     Console.WriteLine("Game over!");
