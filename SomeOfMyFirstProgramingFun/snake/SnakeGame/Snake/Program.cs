@@ -7,19 +7,20 @@
 
     public class Program
     {
-        private static byte direction = 0;
-        private static byte right = 0;
-        private static byte left = 1;
-        private static byte down = 2;
-        private static byte up = 3;
-        private static int speedIncreaser = 1;
-        private static int gameSpeed = 200;
-        private static char snakeBodyElement = '0';
-        private static char snakeFoodElement = 'Q';
+        private const byte Right = 0;
+        private const byte Left = 1;
+        private const byte Down = 2;
+        private const byte Up = 3;
+        private const int SpeedIncreaser = 1;
+        private const char SnakeBodyElement = '0';
+        private const char SnakeFoodElement = 'Q';
+        private const ConsoleColor AppleColor = ConsoleColor.Red;
+        private const ConsoleColor EndGameColor = ConsoleColor.Yellow;
+        private const ConsoleColor SnakeColor = ConsoleColor.Green;
+
         private static long gameScore = 0;
-        private static ConsoleColor appleColor = ConsoleColor.Red;
-        private static ConsoleColor endGameColor = ConsoleColor.Yellow;
-        private static ConsoleColor snakeColor = ConsoleColor.Green;
+        private static byte direction = 0;
+        private static int gameSpeed = 200;
 
         public static void Main(string[] args)
         {
@@ -43,8 +44,8 @@
 
             foreach (Position position in snakeBody)
             {
-                Console.ForegroundColor = snakeColor;
-                DrawingManager(position, snakeBodyElement);
+                Console.ForegroundColor = SnakeColor;
+                DrawingManager(position, SnakeBodyElement);
             }
 
             var randomNumberGenerator = new Random();
@@ -53,8 +54,8 @@
                 randomNumberGenerator.Next(0, Console.WindowWidth),
                 randomNumberGenerator.Next(0, Console.WindowHeight));
 
-            Console.ForegroundColor = appleColor;
-            DrawingManager(food, snakeFoodElement);
+            Console.ForegroundColor = AppleColor;
+            DrawingManager(food, SnakeFoodElement);
 
             while (true)
             {
@@ -94,7 +95,7 @@
                 if (snakeBody.Contains(newHead))
                 {
                     Console.SetCursorPosition(0, 0);
-                    Console.ForegroundColor = endGameColor;
+                    Console.ForegroundColor = EndGameColor;
                     Console.WriteLine("Game over!");
                     Console.WriteLine("Your score is {0}", gameScore);
                     Console.ReadLine();
@@ -102,8 +103,8 @@
                 }
 
                 snakeBody.Enqueue(newHead);
-                Console.ForegroundColor = snakeColor;
-                DrawingManager(newHead, snakeBodyElement);
+                Console.ForegroundColor = SnakeColor;
+                DrawingManager(newHead, SnakeBodyElement);
 
                 // eating the food
                 if (snakeBody.Contains(food))
@@ -112,18 +113,18 @@
                         randomNumberGenerator.Next(0, Console.WindowWidth),
                         randomNumberGenerator.Next(0, Console.WindowHeight));
 
-                    Console.ForegroundColor = appleColor;
-                    DrawingManager(food, snakeFoodElement);
+                    Console.ForegroundColor = AppleColor;
+                    DrawingManager(food, SnakeFoodElement);
 
                     gameScore += 100;
 
-                    if (gameSpeed - speedIncreaser < 0)
+                    if (gameSpeed - SpeedIncreaser < 0)
                     {
                         gameSpeed = 0;
                     }
                     else
                     {
-                        gameSpeed -= speedIncreaser;
+                        gameSpeed -= SpeedIncreaser;
                     }
                 }
                 else
@@ -150,9 +151,9 @@
             {
                 case ConsoleKey.LeftArrow:
                     {
-                        if (previousDirection != right)
+                        if (previousDirection != Right)
                         {
-                            result = left;
+                            result = Left;
                         }
 
                         break;
@@ -160,9 +161,9 @@
 
                 case ConsoleKey.UpArrow:
                     {
-                        if (previousDirection != down)
+                        if (previousDirection != Down)
                         {
-                            result = up;
+                            result = Up;
                         }
 
                         break;
@@ -170,9 +171,9 @@
 
                 case ConsoleKey.RightArrow:
                     {
-                        if (previousDirection != left)
+                        if (previousDirection != Left)
                         {
-                            result = right;
+                            result = Right;
                         }
 
                         break;
@@ -180,9 +181,9 @@
 
                 case ConsoleKey.DownArrow:
                     {
-                        if (previousDirection != up)
+                        if (previousDirection != Up)
                         {
-                            result = down;
+                            result = Down;
                         }
 
                         break;
