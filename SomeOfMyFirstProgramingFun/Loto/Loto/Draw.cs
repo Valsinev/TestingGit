@@ -3,10 +3,7 @@
 namespace Loto
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     public class Draw
     {
         private static int capacity = 48;
@@ -14,8 +11,7 @@ namespace Loto
         private static int drawCount;
         private static int[] drawNumbers;
         private static int[] drawNumbersCounter = new int[capacity];
-
-        //Constructor
+        
         public Draw(string Name, int one, int two, int three, int four, int five, int six)
         {
             this.name = Name;
@@ -30,8 +26,7 @@ namespace Loto
             drawCount++;
             NumbersCounter();
         }
-
-        //methods
+        
         public static int[] NumbersCounter()
         {
             for (int i = 1; i <= drawNumbers.Length; i++)
@@ -40,14 +35,14 @@ namespace Loto
             }
             return drawNumbersCounter;
         }
-       
+
         public static void Print()
         {
             for (int index = 1; index < drawNumbersCounter.Length; index++)
             {
-                double percent = (drawCount * drawNumbersCounter[index]) / 100.0;
-                
-                Console.WriteLine(string.Format("число: {0,-4} изтеглено: {1,3} Процент: {2,3}%", index, drawNumbersCounter[index],percent));
+                float percent = ((float)drawNumbersCounter[index] / drawCount) * 100.0f;
+
+                Console.WriteLine(string.Format("число: {0,-4} изтеглено: {1,3} Процент: {2,3}%", index, drawNumbersCounter[index], percent));
             }
         }
         public static void MostPickedNumbers(int numbersRange)
@@ -77,4 +72,3 @@ namespace Loto
 
     }
 }
- 
